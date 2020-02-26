@@ -70,8 +70,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			clientSocket = new Socket("10.24.68.160", 6789);
-			var a = new MsgFromServer(clientSocket);
-			a.start();
+			(new MsgFromServer(clientSocket)).start();
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
 			grid.setVgap(10);
@@ -138,7 +137,7 @@ public class Main extends Application {
 //			players.add(me);
 //			fields[9][4].setGraphic(new ImageView(hero_up));
 
-//			scoreList.setText(getScoreList());
+			scoreList.setText(getScoreList());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -146,18 +145,18 @@ public class Main extends Application {
 	
 	public static void parseDataFromServer(String dataFromServer) {
 		String[] parseData = dataFromServer.split(" ");
-		if (parseData.length == 0) {
+		if (parseData.length < 2) {
+			System.out.println("not understood " + dataFromServer);
 			return;
 		}
 		String command = parseData[0];
 		String id = parseData[1];
 		messageFromServer(command, id);
 	}
-	public static void messageFromServer(String direction, String id) {
-		System.out.println("direction");
+	public static void messageFromServer(String command, String id) {
 		Platform.runLater(() -> {
 			
-			switch (direction) {
+			switch (command) {
 			case "UP":    playerMoved(0,-1,"up", id);    break;
 			case "DOWN":  playerMoved(0,+1,"down", id);  break;
 			case "LEFT":  playerMoved(-1,0,"left", id);  break;
@@ -166,6 +165,8 @@ public class Main extends Application {
 			case "REMOVEPLAYER": removePlayer(id); break;
 			default: break;
 			}
+			
+			scoreList.setText(getScoreList());
 		});
 	}
 	
@@ -204,19 +205,37 @@ public class Main extends Application {
 	}
 
 	public static void playerMoved(int delta_x, int delta_y, String direction, String id) {
-		me.direction = direction;
-		int x = me.getXpos(),y = me.getYpos();
+		
+
+		Player player2move = null;
+		
+		for (Player player : players) {
+			if (player.getName().equals(id)) {
+				player2move = player;
+				break;
+			}
+		}
+		
+		if (player2move == null) {
+			System.out.println("could not find player" + id);
+			return;
+		}
+		
+
+		
+		player2move.direction = direction;
+		int x = player2move.getXpos(),y = player2move.getYpos();
 
 		if (board[y+delta_y].charAt(x+delta_x)=='w') {
-			me.addPoints(-1);
+			player2move.addPoints(-1);
 		} 
 		else {
 			Player p = getPlayerAt(x+delta_x,y+delta_y);
 			if (p!=null) {
-              me.addPoints(10);
+			  player2move.addPoints(10);
               p.addPoints(-10);
 			} else {
-				me.addPoints(1);
+				player2move.addPoints(1);
 			
 				fields[x][y].setGraphic(new ImageView(image_floor));
 				x+=delta_x;
@@ -235,8 +254,8 @@ public class Main extends Application {
 					fields[x][y].setGraphic(new ImageView(hero_down));
 				};
 
-				me.setXpos(x);
-				me.setYpos(y);
+				player2move.setXpos(x);
+				player2move.setYpos(y);
 			}
 		}
 		scoreList.setText(getScoreList());

@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 public class Server {
 
 	static List<Socket> userSessions = new ArrayList<>();
-	
+	static List<Player> players = new ArrayList<>();
 	
 	public static void emit(String msg) throws IOException {
 		for (Socket userSession : userSessions) {
