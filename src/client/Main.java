@@ -1,4 +1,4 @@
-package game2020;
+package client;
 
 import java.util.ArrayList;
 import java.util.List;
