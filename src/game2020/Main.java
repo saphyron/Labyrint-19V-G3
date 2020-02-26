@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -26,10 +27,10 @@ public class Main extends Application {
 	public static Player me;
 	public static List<Player> players = new ArrayList<Player>();
 
-	private Label[][] fields;
-	private TextArea scoreList;
+	private static Label[][] fields;
+	private static TextArea scoreList;
 	
-	private  String[] board = {    // 20x20
+	private static  String[] board = {    // 20x20
 			"wwwwwwwwwwwwwwwwwwww",
 			"w        ww        w",
 			"w w  w  www w  w  ww",
@@ -142,8 +143,22 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-
-	public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
+	
+	public static void playerMovedFromServer(String direction) {
+		//System.out.println("hi");
+		Platform.runLater(() -> {
+			
+			switch (direction) {
+			case "UP":    playerMoved(0,-1,"up");    break;
+			case "DOWN":  playerMoved(0,+1,"down");  break;
+			case "LEFT":  playerMoved(-1,0,"left");  break;
+			case "RIGHT": playerMoved(+1,0,"right"); break;
+			default: break;
+			}
+		});
+	}
+	
+	static public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
 
@@ -182,7 +197,7 @@ public class Main extends Application {
 		scoreList.setText(getScoreList());
 	}
 
-	public String getScoreList() {
+	public static String getScoreList() {
 		StringBuffer b = new StringBuffer(100);
 		for (Player p : players) {
 			b.append(p+"\r\n");
@@ -190,7 +205,7 @@ public class Main extends Application {
 		return b.toString();
 	}
 
-	public Player getPlayerAt(int x, int y) {
+	public static Player getPlayerAt(int x, int y) {
 		for (Player p : players) {
 			if (p.getXpos()==x && p.getYpos()==y) {
 				return p;
@@ -200,6 +215,8 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		var a = new MsgFromServer();
+		a.start();
 		launch(args);
 	}
 }
