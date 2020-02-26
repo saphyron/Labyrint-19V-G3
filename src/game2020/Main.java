@@ -28,6 +28,8 @@ public class Main extends Application {
 	public static Image hero_right,hero_left,hero_up,hero_down;
 
 	public static Player me;
+	public static String id;
+	public static Socket clientSocket;
 	public static List<Player> players = new ArrayList<Player>();
 
 	private static Label[][] fields;
@@ -67,9 +69,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Socket clientSocket = new Socket("10.24.68.160", 6789);
-//			SendBesked sendBesked = new SendBesked(clientSocket);
-//			sendBesked.start();
+			clientSocket = new Socket("10.24.68.160", 6789);
+			var a = new MsgFromServer(clientSocket);
+			a.start();
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
 			grid.setVgap(10);
@@ -122,10 +124,10 @@ public class Main extends Application {
 
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
-				case UP:    sendBesked("up", clientSocket);    break;
-				case DOWN:  sendBesked("down", clientSocket);  break;
-				case LEFT:  sendBesked("left", clientSocket);  break;
-				case RIGHT: sendBesked("right", clientSocket); break;
+				case UP:    movePlayer("up");    break;
+				case DOWN:  movePlayer("down");  break;
+				case LEFT:  movePlayer("left");  break;
+				case RIGHT: movePlayer("right"); break;
 				default: break;
 				}
 			});
@@ -136,14 +138,6 @@ public class Main extends Application {
 			players.add(me);
 			fields[9][4].setGraphic(new ImageView(hero_up));
 
-			Player John = new Player("John",14,15,"up");
-			players.add(John);
-			fields[14][15].setGraphic(new ImageView(hero_up));
-			
-			Player Joakim = new Player("Joakim", 14, 4, "up");
-			players.add(Joakim);
-			fields[14][4].setGraphic(new ImageView(hero_up));
-
 			scoreList.setText(getScoreList());
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -151,7 +145,7 @@ public class Main extends Application {
 	}
 	
 	public static void playerMovedFromServer(String direction) {
-		//System.out.println("hi");
+		System.out.println("direction");
 		Platform.runLater(() -> {
 			
 			switch (direction) {
@@ -164,8 +158,8 @@ public class Main extends Application {
 		});
 	}
 	
-	static public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
-	public void sendBesked(String besked, Socket clientSocket) {
+	
+	public static void sendBesked(String besked) {
 		DataOutputStream outToServer;
 		try {
 			outToServer = new DataOutputStream(clientSocket.getOutputStream());
@@ -174,8 +168,16 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void spawnPlayer() {
+		sendBesked("spawn" + " " + id);
+	}
+	
+	public static void movePlayer(String direction) {
+		sendBesked(direction + " " + id);
+	}
 
-	public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
+	public static synchronized void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
 
@@ -232,8 +234,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		var a = new MsgFromServer();
-		a.start();
+		
 		launch(args);
 	}
 }

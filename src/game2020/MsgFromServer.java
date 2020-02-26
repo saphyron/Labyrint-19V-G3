@@ -6,19 +6,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class MsgFromServer extends Thread{
+	private Socket clientSocket;
 	
+	public MsgFromServer(Socket clientSocket) {
+		this.clientSocket = clientSocket;
+	}
 	
 	
 	public void run()  {
-		
-		
-		Socket clientSocket;
-		
-		try {
-			clientSocket = new Socket("localhost", 6789);	
-		} catch (Exception e) {
-			return;
-		}
 		while (true) {
 			
 			String modifiedSentence;
