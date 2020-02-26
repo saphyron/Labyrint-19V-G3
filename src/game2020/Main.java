@@ -73,7 +73,6 @@ public class Main extends Application {
 			var a = new MsgFromServer(clientSocket);
 			a.start();
 			GridPane grid = new GridPane();
-			id = Math.random() + "";
 			grid.setHgap(10);
 			grid.setVgap(10);
 			grid.setPadding(new Insets(0, 10, 0, 10));
@@ -131,30 +130,40 @@ public class Main extends Application {
 				default: break;
 				}
 			});
-			
+			id = Math.random() + "";
+			joinServer();
             // Setting up standard players
 			
-			me = new Player("Jeppe",9,4,"up");
-			players.add(me);
-			fields[9][4].setGraphic(new ImageView(hero_up));
+//			me = new Player(this.id,9,4,"up");
+//			players.add(me);
+//			fields[9][4].setGraphic(new ImageView(hero_up));
 
-			scoreList.setText(getScoreList());
+//			scoreList.setText(getScoreList());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void playerMovedFromServer(String direction) {
+	public static void parseDataFromServer(String dataFromServer) {
+		String[] parseData = dataFromServer.split(" ");
+		if (parseData.length == 0) {
+			return;
+		}
+		String command = parseData[0];
+		String id = parseData[1];
+		messageFromServer(command, id);
+	}
+	public static void messageFromServer(String direction, String id) {
 		System.out.println("direction");
 		Platform.runLater(() -> {
 			
 			switch (direction) {
-			case "UP":    playerMoved(0,-1,"up");    break;
-			case "DOWN":  playerMoved(0,+1,"down");  break;
-			case "LEFT":  playerMoved(-1,0,"left");  break;
-			case "RIGHT": playerMoved(+1,0,"right"); break;
-			case "NEW PLAYER": newPlayer("test"); break;
-			case "REMOVE PLAYER": removePlayer("test"); break;
+			case "UP":    playerMoved(0,-1,"up", id);    break;
+			case "DOWN":  playerMoved(0,+1,"down", id);  break;
+			case "LEFT":  playerMoved(-1,0,"left", id);  break;
+			case "RIGHT": playerMoved(+1,0,"right", id); break;
+			case "NEWPLAYER": newPlayer(id); break;
+			case "REMOVEPLAYER": removePlayer(id); break;
 			default: break;
 			}
 		});
@@ -194,7 +203,7 @@ public class Main extends Application {
 		sendBesked(direction + " " + id);
 	}
 
-	public static void playerMoved(int delta_x, int delta_y, String direction) {
+	public static void playerMoved(int delta_x, int delta_y, String direction, String id) {
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
 

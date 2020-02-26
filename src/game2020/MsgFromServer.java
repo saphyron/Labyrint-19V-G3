@@ -22,7 +22,7 @@ public class MsgFromServer extends Thread{
 				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				modifiedSentence = inFromServer.readLine();
 				System.out.println("FROM server:¤" + modifiedSentence + "¤");
-				Main.playerMovedFromServer(modifiedSentence);
+				Main.parseDataFromServer(modifiedSentence);
 				//Main.playerMoved(0,-1,"up");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
