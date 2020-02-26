@@ -1,4 +1,4 @@
-package client;
+package game2020;
 
 public class Player {
 	String name;
