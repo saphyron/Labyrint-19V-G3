@@ -73,7 +73,7 @@ public class Main extends Application {
 			var a = new MsgFromServer(clientSocket);
 			a.start();
 			GridPane grid = new GridPane();
-
+			id = Math.random() + "";
 			grid.setHgap(10);
 			grid.setVgap(10);
 			grid.setPadding(new Insets(0, 10, 0, 10));
@@ -153,6 +153,8 @@ public class Main extends Application {
 			case "DOWN":  playerMoved(0,+1,"down");  break;
 			case "LEFT":  playerMoved(-1,0,"left");  break;
 			case "RIGHT": playerMoved(+1,0,"right"); break;
+			case "NEW PLAYER": newPlayer("test"); break;
+			case "REMOVE PLAYER": removePlayer("test"); break;
 			default: break;
 			}
 		});
@@ -169,7 +171,22 @@ public class Main extends Application {
 		}
 	}
 	
-	public static void spawnPlayer() {
+	public static void newPlayer(String navn) {
+		Player np = new Player(navn,9,4,"up");
+		players.add(np);
+		fields[9][4].setGraphic(new ImageView(hero_up));
+	}
+	
+	public static void removePlayer(String navn) {
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getName().equals(navn)) {
+				players.remove(i);
+				return;
+			}
+		}
+	}
+	
+	public static void joinServer() {
 		sendBesked("spawn" + " " + id);
 	}
 	
@@ -177,7 +194,7 @@ public class Main extends Application {
 		sendBesked(direction + " " + id);
 	}
 
-	public static synchronized void playerMoved(int delta_x, int delta_y, String direction) {
+	public static void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
 
