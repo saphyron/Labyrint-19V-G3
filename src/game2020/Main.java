@@ -196,7 +196,7 @@ public class Main extends Application {
 	}
 	
 	public static void joinServer() {
-		sendBesked("spawn" + " " + id);
+		sendBesked("NEWPLAYER" + " " + id);
 	}
 	
 	public static void movePlayer(String direction) {
