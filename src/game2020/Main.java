@@ -143,7 +143,7 @@ public class Main extends Application {
 		}
 	}
 
-	public void playerMoved(int delta_x, int delta_y, String direction) {
+	public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
 
