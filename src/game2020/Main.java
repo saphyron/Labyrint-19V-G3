@@ -1,5 +1,8 @@
 package game2020;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +67,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			Socket clientSocket = new Socket("10.24.68.160", 6789);
+//			SendBesked sendBesked = new SendBesked(clientSocket);
+//			sendBesked.start();
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
 			grid.setVgap(10);
@@ -116,10 +122,10 @@ public class Main extends Application {
 
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
-				case UP:    playerMoved(0,-1,"up");    break;
-				case DOWN:  playerMoved(0,+1,"down");  break;
-				case LEFT:  playerMoved(-1,0,"left");  break;
-				case RIGHT: playerMoved(+1,0,"right"); break;
+				case UP:    sendBesked("up", clientSocket);    break;
+				case DOWN:  sendBesked("down", clientSocket);  break;
+				case LEFT:  sendBesked("left", clientSocket);  break;
+				case RIGHT: sendBesked("right", clientSocket); break;
 				default: break;
 				}
 			});
@@ -159,6 +165,17 @@ public class Main extends Application {
 	}
 	
 	static public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
+	public void sendBesked(String besked, Socket clientSocket) {
+		DataOutputStream outToServer;
+		try {
+			outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			outToServer.writeBytes(besked + '\n');
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
 
