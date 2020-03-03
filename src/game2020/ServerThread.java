@@ -10,7 +10,8 @@ import java.util.HashMap;
 public class ServerThread extends Thread {
 
 	Socket connSocket = new Socket();
-
+	
+	
 	public ServerThread(Socket connSocket) {
 		this.connSocket = connSocket;
 	}
@@ -43,13 +44,18 @@ public class ServerThread extends Thread {
 				var msgFromClient = inFromClient.readLine();
 				String[] commandsFromClient = msgFromClient.split(" ");
 				
+				System.out.println("will emit");
+				Server.emit(msgFromClient);
 				//System.out.println(commands);
 				
+
+				/*
+				var commandFromUser = commandsFromClient[0];
 				
-				
-				if (commands.containsKey(commandsFromClient[0])) {
+				if (commands.containsKey(commandFromUser)) {
 					System.out.println("A new player connected. Will now emit\n" + msgFromClient);
-				}
+					commands.get(commandFromUser).returnPayload(msgFromClient);
+				} */
 				
 				//System.out.println("Received: " + clientSentence);
 				

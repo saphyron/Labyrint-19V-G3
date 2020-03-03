@@ -69,7 +69,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			clientSocket = new Socket("10.24.68.160", 6789);
+			clientSocket = new Socket("localhost", 6789);
 			(new MsgFromServer(clientSocket)).start();
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
@@ -217,7 +217,7 @@ public class Main extends Application {
 		}
 		
 		if (player2move == null) {
-			System.out.println("could not find player" + id);
+			System.out.println("could not find player " + id);
 			return;
 		}
 		
@@ -279,7 +279,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		
+		System.out.println("hello?");
 		launch(args);
 	}
 }
