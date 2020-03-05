@@ -5,11 +5,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Random;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
@@ -19,8 +22,39 @@ import javafx.scene.text.*;
 
 public class Main extends Application {
 	
-	public static Socket clientSocket;
 	
+	String[] names = new String[] {
+	"Alfa",
+	"Bravo",
+	"Charlie",
+	"Delta",
+	"Echo",
+	"Foxtrot",
+	"Golf",
+	"Hotel",
+	"India",
+	"Juliet",
+	"Kilo",
+	"Lima",
+	"Mike",
+	"November",
+	"Oscar",
+	"Papa",
+	"Quebec",
+	"Romeo",
+	"Sierra",
+	"Tango",
+	"Uniform",
+	"Victor",
+	"Whiskey",
+	"X-Ray",
+	"Yankee",
+	"Zulu"
+	};
+	
+	private static DataOutputStream outToServer;
+	
+	public String name = "TBA";
 	public static final int size = 20; 
 	public static final int scene_height = size * 20 + 100;
 	public static final int scene_width = size * 20 + 200;
@@ -67,7 +101,15 @@ public class Main extends Application {
 	// -------------------------------------------
 	
 	public void initStart(Stage primaryStage) throws Exception {
-
+		
+	    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	        @Override
+	        public void handle(WindowEvent e) {
+	           Platform.exit();
+	           System.exit(0);
+	        }
+	     });
+	    
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
@@ -120,10 +162,10 @@ public class Main extends Application {
 
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 			switch (event.getCode()) {
-			case UP:    playerMoved(0,-1,"up");    break;
-			case DOWN:  playerMoved(0,+1,"down");  break;
-			case LEFT:  playerMoved(-1,0,"left");  break;
-			case RIGHT: playerMoved(+1,0,"right"); break;
+			case UP:    sendMsg(name + " up\n");    break;
+			case DOWN:  sendMsg(name + " down\n");  break;
+			case LEFT:  sendMsg(name + " left\n");  break;
+			case RIGHT: sendMsg(name + " right\n"); break;
 			default: break;
 			}
 		});
@@ -137,17 +179,13 @@ public class Main extends Application {
 		
 			initStart(primaryStage);
 			scoreList.setText(getScoreList());
+			MsgFromServer msgFromServer = new MsgFromServer();
+			msgFromServer.start();
 			
-			var clientSocket = MsgFromServer.clientSocket;
-			Player player = new Player("kim", 6, 7, "up");
-			players.add(player);
+			Thread.sleep(1000);
+			outToServer = MsgFromServer.outToServer; 
 			
-			if (clientSocket != null) {
-				var outToServer = new DataOutputStream(clientSocket.getOutputStream());
-				outToServer.writeBytes("hello");
-			} else {
-				System.out.println("client socket is null");
-			}
+			
 	}
 	
 	public static Hashtable<String, Player> playersHash = new Hashtable<String, Player>();
@@ -160,7 +198,7 @@ public class Main extends Application {
 			Player player = new Player(name, x, y, "up");
 			players.add(player);
 			fields[9][4].setGraphic(new ImageView(hero_up));
-			//scoreList.setText(getScoreList());
+			scoreList.setText(getScoreList());
 		});
 	}
 	
@@ -175,6 +213,16 @@ public class Main extends Application {
 			default: break;
 			}
 		});
+	}
+	
+	public static void sendMsg(String msg) {
+		try {
+			outToServer.writeBytes(msg);
+			outToServer.flush();
+		} catch (Exception e) {
+			System.out.println("could not send msg");
+			System.out.println(outToServer == null);
+		}
 	}
 	
 	static public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
@@ -219,7 +267,7 @@ public class Main extends Application {
 	public static String getScoreList() {
 		StringBuffer b = new StringBuffer(100);
 		for (Player p : players) {
-			b.append(p+"\r\n");
+			b.append(p + "\r\n");
 		}
 		return b.toString();
 	}
@@ -234,11 +282,6 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		
-		
-		MsgFromServer msgFromServer = new MsgFromServer();
-		msgFromServer.start();
-		clientSocket = msgFromServer.clientSocket;
 		launch(args);
 	}
 }
