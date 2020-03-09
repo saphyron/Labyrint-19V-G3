@@ -11,56 +11,41 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MsgFromServer extends Thread {
-	
-	public static DataOutputStream outToServer;
-	public void run() {
-		String modifiedSentence = "";
-		Socket clientSocket = null;
 
+	private BufferedReader inFromServer;
+
+	public MsgFromServer(Socket socket) throws IOException {
+		inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	}
+
+	public void run() {
 		try {
-			clientSocket = new Socket("localhost", 6789);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			run2();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-		try {
-			outToServer = new DataOutputStream(clientSocket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		BufferedReader inFromServer = null;
-		try {
-			inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			outToServer.writeBytes("hi from client\n");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		while (true) {
-			try {
-				modifiedSentence = inFromServer.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return;
-			}
-			System.out.println("FROM SERVER: " + modifiedSentence);
+			System.out.println("good bye");
+			return;
 		}
 	}
-	
+
+	public void run2() throws IOException {
+		System.out.println("My job is to listen to server");
+		System.out.println(inFromServer == null);
+		while (true) {
+			String msgFromServer = inFromServer.readLine();
+			System.out.println("FROM SERVER:" + msgFromServer);
+			
+			
+			/*
+			if (msgFromServer.equals("hello from server what is your name?")) {
+				Main.sayName();
+			} */
+				
+			
+			
+ 
+			
+
+		}
+	}
 
 }

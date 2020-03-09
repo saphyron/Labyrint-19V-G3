@@ -1,6 +1,9 @@
 package game2020;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -19,42 +22,42 @@ import javafx.scene.image.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.*;
-
 public class Main extends Application {
+	
+	public static Socket clientSocket;
+	public static DataOutputStream outToServer;
 	
 	
 	String[] names = new String[] {
-	"Alfa",
-	"Bravo",
-	"Charlie",
-	"Delta",
-	"Echo",
-	"Foxtrot",
-	"Golf",
-	"Hotel",
-	"India",
-	"Juliet",
-	"Kilo",
-	"Lima",
-	"Mike",
-	"November",
-	"Oscar",
-	"Papa",
-	"Quebec",
-	"Romeo",
-	"Sierra",
-	"Tango",
-	"Uniform",
-	"Victor",
-	"Whiskey",
-	"X-Ray",
-	"Yankee",
-	"Zulu"
+		"Alfa",
+		"Bravo",
+		"Charlie",
+		"Delta",
+		"Echo",
+		"Foxtrot",
+		"Golf",
+		"Hotel",
+		"India",
+		"Juliet",
+		"Kilo",
+		"Lima",
+		"Mike",
+		"November",
+		"Oscar",
+		"Papa",
+		"Quebec",
+		"Romeo",
+		"Sierra",
+		"Tango",
+		"Uniform",
+		"Victor",
+		"Whiskey",
+		"X-Ray",
+		"Yankee",
+		"Zulu"
 	};
 	
-	private static DataOutputStream outToServer;
-	
-	public String name = "TBA";
+	public static String name = "TBA";
 	public static final int size = 20; 
 	public static final int scene_height = size * 20 + 100;
 	public static final int scene_width = size * 20 + 200;
@@ -63,7 +66,6 @@ public class Main extends Application {
 	public static Image image_wall;
 	public static Image hero_right,hero_left,hero_up,hero_down;
 
-	public static Player me;
 	public static List<Player> players = new ArrayList<Player>();
 
 	private static Label[][] fields;
@@ -105,6 +107,12 @@ public class Main extends Application {
 	    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	        @Override
 	        public void handle(WindowEvent e) {
+	           try {
+				clientSocket.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	           Platform.exit();
 	           System.exit(0);
 	        }
@@ -162,11 +170,11 @@ public class Main extends Application {
 
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 			switch (event.getCode()) {
-			case UP:    sendMsg(name + " up\n");    break;
-			case DOWN:  sendMsg(name + " down\n");  break;
-			case LEFT:  sendMsg(name + " left\n");  break;
-			case RIGHT: sendMsg(name + " right\n"); break;
-			default: break;
+				case UP:    sendMsg("up " + name + "\n");    break;
+				case DOWN:  sendMsg("down " + name + "\n");  break;
+				case LEFT:  sendMsg("left " + name + "\n");  break;
+				case RIGHT: sendMsg("right " + name + "\n"); break;
+				default: break;
 			}
 		});
 		
@@ -179,89 +187,25 @@ public class Main extends Application {
 		
 			initStart(primaryStage);
 			scoreList.setText(getScoreList());
-			MsgFromServer msgFromServer = new MsgFromServer();
-			msgFromServer.start();
 			
-			Thread.sleep(1000);
-			outToServer = MsgFromServer.outToServer; 
+			clientSocket = new Socket("localhost", 4444);
+			outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			
+			name = names[(new Random()).nextInt(names.length)];
+			
+			MsgFromServer p = new MsgFromServer(clientSocket);
+		    new Thread(p).start();
+		     
 			
 	}
 	
-	public static Hashtable<String, Player> playersHash = new Hashtable<String, Player>();
-	
-	public static void spawnPlayer(String name, int x, int y) {
-		
-		System.out.println("a new player shall be spawned");
-		Platform.runLater(() -> {
-			System.out.println(name + " " + x + " " + y + " up");
-			Player player = new Player(name, x, y, "up");
-			players.add(player);
-			fields[9][4].setGraphic(new ImageView(hero_up));
-			scoreList.setText(getScoreList());
-		});
-	}
-	
-	public static void playerMovedFromServer(String direction) {
-
-		Platform.runLater(() -> {
-			switch (direction) {
-			case "UP":    playerMoved(0,-1,"up");    break;
-			case "DOWN":  playerMoved(0,+1,"down");  break;
-			case "LEFT":  playerMoved(-1,0,"left");  break;
-			case "RIGHT": playerMoved(+1,0,"right"); break;
-			default: break;
-			}
-		});
-	}
 	
 	public static void sendMsg(String msg) {
 		try {
 			outToServer.writeBytes(msg);
-			outToServer.flush();
 		} catch (Exception e) {
 			System.out.println("could not send msg");
-			System.out.println(outToServer == null);
 		}
-	}
-	
-	static public synchronized void playerMoved(int delta_x, int delta_y, String direction) {
-		me.direction = direction;
-		int x = me.getXpos(),y = me.getYpos();
-
-		if (board[y+delta_y].charAt(x+delta_x)=='w') {
-			me.addPoints(-1);
-		} 
-		else {
-			Player p = getPlayerAt(x+delta_x,y+delta_y);
-			if (p!=null) {
-              me.addPoints(10);
-              p.addPoints(-10);
-			} else {
-				me.addPoints(1);
-			
-				fields[x][y].setGraphic(new ImageView(image_floor));
-				x+=delta_x;
-				y+=delta_y;
-
-				if (direction.equals("right")) {
-					fields[x][y].setGraphic(new ImageView(hero_right));
-				};
-				if (direction.equals("left")) {
-					fields[x][y].setGraphic(new ImageView(hero_left));
-				};
-				if (direction.equals("up")) {
-					fields[x][y].setGraphic(new ImageView(hero_up));
-				};
-				if (direction.equals("down")) {
-					fields[x][y].setGraphic(new ImageView(hero_down));
-				};
-
-				me.setXpos(x);
-				me.setYpos(y);
-			}
-		}
-		scoreList.setText(getScoreList());
 	}
 
 	public static String getScoreList() {
@@ -271,18 +215,14 @@ public class Main extends Application {
 		}
 		return b.toString();
 	}
-
-	public static Player getPlayerAt(int x, int y) {
-		for (Player p : players) {
-			if (p.getXpos()==x && p.getYpos()==y) {
-				return p;
-			}
-		}
-		return null;
+	
+	public static void sayName() {
+		sendMsg("name " + name + "\n");
 	}
 
 	public static void main(String[] args) {
 		launch(args);
 	}
+
 }
 
