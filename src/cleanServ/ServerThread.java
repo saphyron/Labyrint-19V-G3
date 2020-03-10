@@ -12,6 +12,7 @@ public class ServerThread extends Thread {
 
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
+	private String name;
 
 	private static final Set<String> DIRECTIONS = Set.of("left", "up", "right", "down");
 
@@ -52,8 +53,7 @@ public class ServerThread extends Thread {
 				listedStrFromClient = Arrays.asList(clientSentence.split(" "));
 
 				if (listedStrFromClient.size() == 2 && DIRECTIONS.contains(listedStrFromClient.get(0))) {
-					
-					System.out.println("move trigger!!");
+
 					String direction = listedStrFromClient.get(0);
 					String name = listedStrFromClient.get(1);
 
