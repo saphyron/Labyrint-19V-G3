@@ -169,7 +169,7 @@ public class Main extends Application {
 		});
 	}
 
-	public static void playerMoved(String name, int x, int y, int point, String direction, String otherPlayer, int otherPoints) {
+	public synchronized static void playerMoved(String name, int x, int y, int point, String direction, String otherPlayer, int otherPoints) {
 		
 		Platform.runLater(() -> {
 			
