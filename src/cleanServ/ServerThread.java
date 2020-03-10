@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import game2020.Player;
 
 public class ServerThread extends Thread {
 
@@ -21,7 +22,13 @@ public class ServerThread extends Thread {
 
 	@Override
 	public void run() {
+			for (Player player: Server.players) {
+				String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", player.name, player.xpos, player.ypos, player, player.direction);
+				String toSend = "update " + payload + "\n";
 
+				System.out.println(toSend);
+				Server.emit(toSend);
+			}
 			String clientSentence = null;
 			String capitalizedSentence;
 			List<String> listedStrFromClient;
