@@ -41,8 +41,7 @@ public class SomeThread extends Thread {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// TODO: handle exception
 			}
 			while (true) {
@@ -56,34 +55,32 @@ public class SomeThread extends Thread {
 				System.out.println("from client: " + clientSentence);
 				listedStrFromClient = Arrays.asList(clientSentence.split(" "));
 
-			if (listedStrFromClient.size() == 2 && DIRECTIONS.contains(listedStrFromClient.get(0))) {
+				if (listedStrFromClient.size() == 2 && DIRECTIONS.contains(listedStrFromClient.get(0))) {
 
-				System.out.println("move trigger!!");
-				String direction = listedStrFromClient.get(0);
-				String name = listedStrFromClient.get(1);
+					System.out.println("move trigger!!");
+					String direction = listedStrFromClient.get(0);
+					String name = listedStrFromClient.get(1);
 
-				System.out.println(direction + " " + name + " update");
+					System.out.println(direction + " " + name + " update");
 
-				switch (direction) {
-				case "up":
-					TCPServer.playerMoved(0, -1, "up", name);
-					break;
-				case "down":
-					TCPServer.playerMoved(0, +1, "down", name);
-					break;
-				case "left":
-					TCPServer.playerMoved(-1, 0, "left", name);
-					break;
-				case "right":
-					TCPServer.playerMoved(+1, 0, "right", name);
-					break;
-				default:
-					break;
+					switch (direction) {
+					case "up":
+						TCPServer.playerMoved(0, -1, "up", name);
+						break;
+					case "down":
+						TCPServer.playerMoved(0, +1, "down", name);
+						break;
+					case "left":
+						TCPServer.playerMoved(-1, 0, "left", name);
+						break;
+					case "right":
+						TCPServer.playerMoved(+1, 0, "right", name);
+						break;
+					default:
+						break;
+					}
 				}
-
 			}
-
 		}
-
 	}
 }

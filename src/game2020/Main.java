@@ -249,6 +249,10 @@ public class Main extends Application {
 		return null;
 	}
 	
+	public void playerMoved(int delta_x, int delta_y, String direction, String name) {
+		updateScoreTable();
+	}
+	
 	// ----------------------------------------------------
 	
 	public static void addShotOnScreen() {
