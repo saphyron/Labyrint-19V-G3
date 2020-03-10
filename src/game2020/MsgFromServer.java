@@ -35,10 +35,23 @@ public class MsgFromServer extends Thread {
 			System.out.println("FROM SERVER:" + msgFromServer);
 			Main.sendMsg("modtaget!!\n");
 			
-			/*
-			if (msgFromServer.equals("hello from server what is your name?")) {
-				Main.sayName();
-			} */
+			List<String> k = Arrays.asList(msgFromServer.split(" "));
+			
+			if (k.size() == 2 && k.get(0).equals("update")) {
+				List<String> lstUpdate = Arrays.asList(k.get(1).split("&"));
+				
+				System.out.println(lstUpdate.get(1));
+				System.out.println(lstUpdate.get(2));
+				
+				
+				int x = Integer.parseInt(lstUpdate.get(1).split("=")[1]);
+				int y = Integer.parseInt(lstUpdate.get(2).split("=")[1]);
+				String name = lstUpdate.get(0).split("=")[1];
+				Main.playerMoved(x,y, "up", name);
+				
+				//Main.drawPlayer(x, y, "dummy");
+				
+			}
 		}
 	}
 

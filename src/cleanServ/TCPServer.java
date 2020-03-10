@@ -54,6 +54,8 @@ public class TCPServer {
 		return out.toString();
 	}
 	
+
+	
 	private static  String[] board = {    // 20x20
 			"wwwwwwwwwwwwwwwwwwww",
 			"w        ww        w",
@@ -99,7 +101,7 @@ public class TCPServer {
 			System.out.println("123could not find player " + name);
 			players.add(new Player(name, 1, 1, "up"));
 			
-			String payload = String.format("name=%s&x=%d&y%d&points=%d&direction=%s", name, 1, 1, 0, "up");
+			String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, 1, 1, 0, "up");
 			String toSend = "update " + payload + "\n";
 
 			System.out.println("_______" + toSend);
@@ -139,7 +141,7 @@ public class TCPServer {
 			}
 		}
 
-		String payload = String.format("name=%s&x=%d&y%d&points=%d&direction=%s", name, x, y, me.point, direction);
+		String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, x, y, me.point, direction);
 
 		if (collisionPlayerName != null) {
 			payload += String.format("cname=%s&cpoints=%d", collisionPlayerName, collisionPlayerPoints);
