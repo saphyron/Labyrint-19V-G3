@@ -112,7 +112,7 @@ public class Server {
 			System.out.println("123could not find player " + name);
 			players.add(new Player(name, potX, potY, "up"));
 			
-			String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, 1, 1, 0, "up");
+			String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, potX, potY, 0, "up");
 			String toSend = "update " + payload + "\n";
 
 			System.out.println("_______" + toSend);
