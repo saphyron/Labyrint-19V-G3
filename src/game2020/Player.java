@@ -15,6 +15,10 @@ public class Player {
 		this.point = 0;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public int getXpos() {
 		return xpos;
 	}

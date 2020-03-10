@@ -51,10 +51,10 @@ public class Main extends Application {
 			"w  w              ww", "w  w www  w w  ww ww", "w w      ww w     ww", "w   w   ww  w      w", "wwwwwwwwwwwwwwwwwwww" };
 
 	// -------------------------------------------
-	// | Maze: (0,0)              | Score: (1,0) |
+	// | Maze: (0,0) | Score: (1,0) |
 	// |-----------------------------------------|
-	// | boardGrid (0,1)          | scorelist    |
-	// |                          | (1,1)        |
+	// | boardGrid (0,1) | scorelist |
+	// | | (1,1) |
 	// -------------------------------------------
 
 	public void initStart(Stage primaryStage) throws Exception {

@@ -42,8 +42,19 @@ public class SomeThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("from client: " + clientSentence);
-			listedStrFromClient = Arrays.asList(clientSentence.split(" "));
+			catch (Exception e) {
+				// TODO: handle exception
+			}
+			while (true) {
+				try {
+					clientSentence = inFromClient.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return;
+				}
+				System.out.println("from client: " + clientSentence);
+				listedStrFromClient = Arrays.asList(clientSentence.split(" "));
 
 			if (listedStrFromClient.size() == 2 && DIRECTIONS.contains(listedStrFromClient.get(0))) {
 

@@ -52,13 +52,32 @@ public class TCPServer {
 
 		return out.toString();
 	}
+	
 
-	private static String[] board = { // 20x20
-			"wwwwwwwwwwwwwwwwwwww", "w        ww        w", "w w  w  www w  w  ww", "w w  w   ww w  w  ww", "w  w               w",
-			"w w w w w w w  w  ww", "w w     www w  w  ww", "w w     w w w  w  ww", "w   w w  w  w  w   w", "w     w  w  w  w   w",
-			"w ww ww        w  ww", "w  w w    w    w  ww", "w        ww w  w  ww", "w         w w  w  ww", "w        w     w  ww",
-			"w  w              ww", "w  w www  w w  ww ww", "w w      ww w     ww", "w   w   ww  w      w", "wwwwwwwwwwwwwwwwwwww" };
-
+	
+	private static  String[] board = {    // 20x20
+			"wwwwwwwwwwwwwwwwwwww",
+			"w        ww        w",
+			"w w  w  www w  w  ww",
+			"w w  w   ww w  w  ww",
+			"w  w               w",
+			"w w w w w w w  w  ww",
+			"w w     www w  w  ww",
+			"w w     w w w  w  ww",
+			"w   w w  w  w  w   w",
+			"w     w  w  w  w   w",
+			"w ww ww        w  ww",
+			"w  w w    w    w  ww",
+			"w        ww w  w  ww",
+			"w         w w  w  ww",
+			"w        w     w  ww",
+			"w  w              ww",
+			"w  w www  w w  ww ww",
+			"w w      ww w     ww",
+			"w   w   ww  w      w",
+			"wwwwwwwwwwwwwwwwwwww"
+	};
+	
 	public static Player getPlayerAt(int x, int y) {
 		for (Player p : players) {
 			if (p.getXpos() == x && p.getYpos() == y) {
@@ -80,8 +99,8 @@ public class TCPServer {
 		if (me == null) {
 			System.out.println("123could not find player " + name);
 			players.add(new Player(name, 1, 1, "up"));
-
-			String payload = String.format("name=%s&x=%d&y%d&points=%d&direction=%s", name, 1, 1, 0, "up");
+			
+			String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, 1, 1, 0, "up");
 			String toSend = "update " + payload + "\n";
 
 			System.out.println("_______" + toSend);
@@ -121,7 +140,7 @@ public class TCPServer {
 			}
 		}
 
-		String payload = String.format("name=%s&x=%d&y%d&points=%d&direction=%s", name, x, y, me.point, direction);
+		String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, x, y, me.point, direction);
 
 		if (collisionPlayerName != null) {
 			payload += String.format("cname=%s&cpoints=%d", collisionPlayerName, collisionPlayerPoints);
