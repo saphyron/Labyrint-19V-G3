@@ -1,11 +1,11 @@
 package game2020;
 
 public class Player {
-	String name;
-	int xpos;
-	int ypos;
-	int point;
-	String direction;
+	public String name;
+	public int xpos;
+	public int ypos;
+	public int point;
+	public String direction;
 
 	public Player(String name, int xpos, int ypos, String direction) {
 		this.name = name;
@@ -42,5 +42,8 @@ public class Player {
 	}
 	public String toString() {
 		return name+":   "+point;
+	}
+	public String getAllInfo() {
+		return name + " " + xpos + " " + ypos + " " + point + " " + direction;
 	}
 }
