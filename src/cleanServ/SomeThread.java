@@ -44,6 +44,7 @@ public class SomeThread extends Thread {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return;
 				}
 				System.out.println("from client: " + clientSentence);
 				listedStrFromClient = Arrays.asList(clientSentence.split(" "));
