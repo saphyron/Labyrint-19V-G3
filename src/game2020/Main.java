@@ -155,7 +155,7 @@ public class Main extends Application {
 		initStart(primaryStage);
 		scoreList.setText(getScoreList());
 
-		clientSocket = new Socket("localhost", 4444);
+		clientSocket = new Socket("10.24.67.70", 4444);
 		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
 		name = names[(new Random()).nextInt(names.length)];
@@ -177,7 +177,7 @@ public class Main extends Application {
 		Platform.runLater(() -> {
 			
 		Player player2move = null;
-		
+		System.out.println("Looking for: " + otherPlayer);
 		for (Player player : players) {
 			if (player.name.equals(otherPlayer)) {
 				player.point = otherPoints;

@@ -144,7 +144,7 @@ public class Server {
 		String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, x, y, me.point, direction);
 
 		if (collisionPlayerName != null) {
-			payload += String.format("cname=%s&cpoints=%d", collisionPlayerName, collisionPlayerPoints);
+			payload += String.format("&cname=%s&cpoints=%d", collisionPlayerName, collisionPlayerPoints);
 		}
 
 		String toSend = "update " + payload + "\n";
