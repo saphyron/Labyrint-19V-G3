@@ -144,9 +144,6 @@ public class Main extends Application {
 				break;
 			}
 		});
-
-		// Setting up standard players
-
 	}
 
 	@Override
@@ -177,7 +174,6 @@ public class Main extends Application {
 		Platform.runLater(() -> {
 			
 		Player player2move = null;
-		System.out.println("Looking for: " + otherPlayer);
 		for (Player player : players) {
 			if (player.name.equals(otherPlayer)) {
 				player.point = otherPoints;
@@ -204,15 +200,11 @@ public class Main extends Application {
 			if ((oldX == x && oldY == y) == false)
 				fields[oldX][oldY].setGraphic(new ImageView(image_floor));
 		}
-		
 		player2move.point = point;
 		player2move.direction = direction;
 		
-
-		
 		player2move.xpos = x;
 		player2move.ypos = y;
-		
 
 		if (direction.equals("right")) {
 			fields[x][y].setGraphic(new ImageView(hero_right));
@@ -258,5 +250,4 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
 }

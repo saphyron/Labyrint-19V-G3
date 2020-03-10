@@ -23,7 +23,7 @@ public class ServerThread extends Thread {
 	@Override
 	public void run() {
 			for (Player player: Server.players) {
-				String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", player.name, player.xpos, player.ypos, player, player.direction);
+				String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", player.name, player.xpos, player.ypos, player.point, player.direction);
 				String toSend = "update " + payload + "\n";
 
 				System.out.println(toSend);

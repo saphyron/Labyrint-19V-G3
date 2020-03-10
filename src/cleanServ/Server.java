@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import game2020.Player;
 
@@ -89,7 +90,17 @@ public class Server {
 	}
 
 	static public void playerMoved(int delta_x, int delta_y, String direction, String name) {
-
+		int potX = 0;
+		int potY = 0;
+		boolean wall = true;
+		while (wall) {
+			potX = (new Random()).nextInt(18)+1;
+			potY = (new Random()).nextInt(18)+1;
+			if (board[potY].charAt(potX) != 'w') {
+				wall = false;
+			}
+		}
+		
 		Player me = null;
 		for (Player player : players) {
 			if (player.name.equalsIgnoreCase(name)) {
@@ -99,7 +110,7 @@ public class Server {
 
 		if (me == null) {
 			System.out.println("123could not find player " + name);
-			players.add(new Player(name, 1, 1, "up"));
+			players.add(new Player(name, potX, potY, "up"));
 			
 			String payload = String.format("name=%s&x=%d&y=%d&points=%d&direction=%s", name, 1, 1, 0, "up");
 			String toSend = "update " + payload + "\n";
