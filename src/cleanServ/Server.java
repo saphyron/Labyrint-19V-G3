@@ -11,7 +11,7 @@ import java.util.List;
 
 import game2020.Player;
 
-public class TCPServer {
+public class Server {
 
 	public static void main(String[] args) throws Exception {
 
@@ -22,7 +22,7 @@ public class TCPServer {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			var outFromClient = new DataOutputStream(connectionSocket.getOutputStream());
 			lstOutToClient.add(outFromClient);
-			Thread k = new SomeThread(inFromClient, outFromClient);
+			Thread k = new ServerThread(inFromClient, outFromClient);
 			k.start();
 		}
 

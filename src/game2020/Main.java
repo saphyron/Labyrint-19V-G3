@@ -172,7 +172,7 @@ public class Main extends Application {
 		});
 	}
 
-	public static void playerMoved(int x, int y, String direction, String name) {
+	public static void playerMoved(String name, int x, int y, int point, String direction) {
 		
 		Platform.runLater(() -> {
 			
@@ -188,6 +188,7 @@ public class Main extends Application {
 		if (player2move == null) {
 			System.out.println("could not find player " + name);
 			player2move = new Player(name, x, y, direction);
+			
 			players.add(player2move);
 		} else {
 			int oldX = player2move.xpos;
@@ -195,9 +196,9 @@ public class Main extends Application {
 			
 			fields[oldX][oldY].setGraphic(new ImageView(image_floor));
 		}
-
-		player2move.direction = direction;
 		
+		player2move.point = point;
+		player2move.direction = direction;
 		
 
 		
@@ -220,7 +221,9 @@ public class Main extends Application {
 		if (direction.equals("down")) {
 			fields[x][y].setGraphic(new ImageView(hero_down));
 		};
-
+		
+		scoreList.setText(getScoreList());
+		
 		});
 	}
 

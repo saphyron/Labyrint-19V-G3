@@ -3,29 +3,24 @@ package cleanServ;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import game2020.Player;
-
-public class SomeThread extends Thread {
+public class ServerThread extends Thread {
 
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
 
 	private static final Set<String> DIRECTIONS = Set.of("left", "up", "right", "down");
 
-	public SomeThread(BufferedReader inFromClient, DataOutputStream outToClient) {
+	public ServerThread(BufferedReader inFromClient, DataOutputStream outToClient) {
 		this.inFromClient = inFromClient;
 		this.outToClient = outToClient;
 	}
 
 	@Override
 	public void run() {
-
-
 
 			String clientSentence = null;
 			String capitalizedSentence;
@@ -60,16 +55,16 @@ public class SomeThread extends Thread {
 					
 					switch (direction) {
 					case "up":
-						TCPServer.playerMoved(0, -1, "up", name);
+						Server.playerMoved(0, -1, "up", name);
 						break;
 					case "down":
-						TCPServer.playerMoved(0, +1, "down", name);
+						Server.playerMoved(0, +1, "down", name);
 						break;
 					case "left":
-						TCPServer.playerMoved(-1, 0, "left", name);
+						Server.playerMoved(-1, 0, "left", name);
 						break;
 					case "right":
-						TCPServer.playerMoved(+1, 0, "right", name);
+						Server.playerMoved(+1, 0, "right", name);
 						break;
 					default:
 						break;
