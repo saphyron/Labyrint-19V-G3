@@ -33,18 +33,12 @@ public class MsgFromServer extends Thread {
 		while (true) {
 			String msgFromServer = inFromServer.readLine();
 			System.out.println("FROM SERVER:" + msgFromServer);
-			
+			Main.sendMsg("modtaget!!\n");
 			
 			/*
 			if (msgFromServer.equals("hello from server what is your name?")) {
 				Main.sayName();
 			} */
-				
-			
-			
- 
-			
-
 		}
 	}
 

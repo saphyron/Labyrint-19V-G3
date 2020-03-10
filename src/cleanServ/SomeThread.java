@@ -30,8 +30,11 @@ public class SomeThread extends Thread {
 			String capitalizedSentence;
 			List<String> listedStrFromClient;
 			outToClient.writeBytes("hello from server what is your name?\n");
+			outToClient.flush();
+			//outToClient.reset();
 			Thread.sleep(1000);
-			outToClient.writeBytes("hello agian..");
+			outToClient.writeBytes("hello agian..\n");
+			outToClient.flush();
 			while (true) {
 				clientSentence = inFromClient.readLine();
 				System.out.println("from client: " + clientSentence);
