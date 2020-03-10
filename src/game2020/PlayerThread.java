@@ -1,14 +1,8 @@
 package game2020;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PlayerThread extends Thread {
 	private BufferedReader inFromServer;
@@ -16,9 +10,9 @@ public class PlayerThread extends Thread {
 	private ArrayList<Player> players;
 	private boolean playing = true;
 
-	public PlayerThread(Socket socket) throws IOException {
+	public PlayerThread(BufferedReader inFromServer) {
 		super();
-		inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		this.inFromServer = inFromServer;
 	}
 
 	public void setPlaying(boolean playing) {

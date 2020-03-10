@@ -5,11 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Random;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -38,11 +36,12 @@ public class Main extends Application {
 
 	public static String name = "TBA";
 	public static List<Player> players = new ArrayList<Player>();
+	public static PlayerThread playerThread;
 
 	private static Label[][] fields;
 	private static TextArea scoreList;
-	public static Socket clientSocket;
-	public static DataOutputStream outToServer;
+	private static Socket clientSocket;
+	private static DataOutputStream outToServer;
 
 	private static String[] board = { // 20x20
 			"wwwwwwwwwwwwwwwwwwww", "w        ww        w", "w w  w  www w  w  ww", "w w  w   ww w  w  ww", "w  w               w",
@@ -167,11 +166,8 @@ public class Main extends Application {
 		clientSocket = new Socket("localhost", 4444);
 		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
-		name = names[(new Random()).nextInt(names.length)];
-
 		MsgFromServer p = new MsgFromServer(clientSocket);
 		new Thread(p).start();
-
 	}
 
 	public static void sendMsg(String msg) {
@@ -265,7 +261,7 @@ public class Main extends Application {
 	
 	// ----------------------------------------------------
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnknownHostException, IOException{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("What is the IP of the server?");
 		String ipaddress = reader.readLine();
