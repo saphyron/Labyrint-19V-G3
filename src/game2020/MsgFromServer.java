@@ -33,7 +33,6 @@ public class MsgFromServer extends Thread {
 		while (true) {
 			String msgFromServer = inFromServer.readLine();
 			System.out.println("FROM SERVER:" + msgFromServer);
-			//Main.sendMsg("modtaget!!\n");
 			
 			List<String> k = Arrays.asList(msgFromServer.split(" "));
 			
@@ -45,8 +44,13 @@ public class MsgFromServer extends Thread {
 				int y = Integer.parseInt(lstUpdate.get(2).split("=")[1]);
 				int point = Integer.parseInt(lstUpdate.get(3).split("=")[1]);
 				String direction = lstUpdate.get(4).split("=")[1];
-				                                               
-				Main.playerMoved(name, x, y, point, direction);
+				String otherplayer = "";
+				int otherpoints = 0;
+				if (lstUpdate.size() == 7) {
+					otherplayer = lstUpdate.get(5).split("=")[1];
+					otherpoints = Integer.parseInt(lstUpdate.get(6).split("=")[1]);
+				}
+				Main.playerMoved(name, x, y, point, direction, otherplayer, otherpoints);
 				
 			}
 		}

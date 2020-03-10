@@ -172,11 +172,18 @@ public class Main extends Application {
 		});
 	}
 
-	public static void playerMoved(String name, int x, int y, int point, String direction) {
+	public static void playerMoved(String name, int x, int y, int point, String direction, String otherPlayer, int otherPoints) {
 		
 		Platform.runLater(() -> {
 			
 		Player player2move = null;
+		
+		for (Player player : players) {
+			if (player.name.equals(otherPlayer)) {
+				player.point = otherPoints;
+				break;
+			}
+		}
 
 		for (Player player : players) {
 			if (player.name.equals(name)) {
