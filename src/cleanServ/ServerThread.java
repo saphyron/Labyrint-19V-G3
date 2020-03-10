@@ -44,7 +44,7 @@ public class ServerThread extends Thread {
 				try {
 					clientSentence = inFromClient.readLine();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					Server.players.remove(outToClient);
 					e.printStackTrace();
 					return;
 				}
