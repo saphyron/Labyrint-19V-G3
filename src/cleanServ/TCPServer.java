@@ -29,7 +29,7 @@ public class TCPServer {
 	}
 
 	private static List<DataOutputStream> lstOutToClient = new ArrayList<>();
-	
+
 	public static void emit(String msg) {
 		for (DataOutputStream outToClient : lstOutToClient) {
 			try {
@@ -39,8 +39,7 @@ public class TCPServer {
 			}
 		}
 	}
-	
-	
+
 	static List<Player> players = new ArrayList<Player>();
 
 	public static String allPlayers() {
@@ -53,30 +52,13 @@ public class TCPServer {
 
 		return out.toString();
 	}
-	
-	private static  String[] board = {    // 20x20
-			"wwwwwwwwwwwwwwwwwwww",
-			"w        ww        w",
-			"w w  w  www w  w  ww",
-			"w w  w   ww w  w  ww",
-			"w  w               w",
-			"w w w w w w w  w  ww",
-			"w w     www w  w  ww",
-			"w w     w w w  w  ww",
-			"w   w w  w  w  w   w",
-			"w     w  w  w  w   w",
-			"w ww ww        w  ww",
-			"w  w w    w    w  ww",
-			"w        ww w  w  ww",
-			"w         w w  w  ww",
-			"w        w     w  ww",
-			"w  w              ww",
-			"w  w www  w w  ww ww",
-			"w w      ww w     ww",
-			"w   w   ww  w      w",
-			"wwwwwwwwwwwwwwwwwwww"
-	};
-	
+
+	private static String[] board = { // 20x20
+			"wwwwwwwwwwwwwwwwwwww", "w        ww        w", "w w  w  www w  w  ww", "w w  w   ww w  w  ww", "w  w               w",
+			"w w w w w w w  w  ww", "w w     www w  w  ww", "w w     w w w  w  ww", "w   w w  w  w  w   w", "w     w  w  w  w   w",
+			"w ww ww        w  ww", "w  w w    w    w  ww", "w        ww w  w  ww", "w         w w  w  ww", "w        w     w  ww",
+			"w  w              ww", "w  w www  w w  ww ww", "w w      ww w     ww", "w   w   ww  w      w", "wwwwwwwwwwwwwwwwwwww" };
+
 	public static Player getPlayerAt(int x, int y) {
 		for (Player p : players) {
 			if (p.getXpos() == x && p.getYpos() == y) {
@@ -98,7 +80,7 @@ public class TCPServer {
 		if (me == null) {
 			System.out.println("123could not find player " + name);
 			players.add(new Player(name, 1, 1, "up"));
-			
+
 			String payload = String.format("name=%s&x=%d&y%d&points=%d&direction=%s", name, 1, 1, 0, "up");
 			String toSend = "update " + payload + "\n";
 
