@@ -71,6 +71,11 @@ public class Main extends Application {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				/*
+				 * fjern spiller.
+				 * sendMsg("remove " + name);
+				 */
+				
 				Platform.exit();
 				System.exit(0);
 			}
