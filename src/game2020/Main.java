@@ -194,7 +194,8 @@ public class Main extends Application {
 			int oldX = player2move.xpos;
 			int oldY = player2move.ypos;
 			
-			fields[oldX][oldY].setGraphic(new ImageView(image_floor));
+			if ((oldX == x && oldY == y) == false)
+				fields[oldX][oldY].setGraphic(new ImageView(image_floor));
 		}
 		
 		player2move.point = point;
